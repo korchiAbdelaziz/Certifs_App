@@ -1,0 +1,48 @@
+[
+  {
+    "title": "Ingénieur Solution Cloud AWS",
+    "org": "Amazon Web Services",
+    "date": "2025-05",
+    "skills": [
+      "AWS",
+      "Architecture",
+      "Sécurité",
+      "Docker"
+    ],
+    "file": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800"
+  },
+  {
+    "title": "Développeur Full-Stack React & Node",
+    "org": "Meta (Coursera)",
+    "date": "2025-08",
+    "skills": [
+      "React",
+      "JavaScript",
+      "Tailwind CSS",
+      "MongoDB"
+    ],
+    "file": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800"
+  },
+  {
+    "title": "",
+    "org": "Google Analytics",
+    "date": "2024-12",
+    "skills": [
+      "Data",
+      "Marketing",
+      "SEO"
+    ],
+    "file": ""
+  },
+  {
+    "title": "Expert en Cybersécurité",
+    "org": "",
+    "date": "",
+    "skills": [
+      "Pentesting",
+      "Linux",
+      "Firewalls"
+    ],
+    "file": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800"
+  }
+]
