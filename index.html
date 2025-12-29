@@ -4,186 +4,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Korchi Abdelaziz | Certificats </title>
+    <title>Korchi's Certifs</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { brand: '#FACC15', darkBg: '#0F172A', darkCard: '#1E293B' }
-                }
-            }
+            theme: { extend: { colors: { brand: '#FACC15', darkBg: '#0F172A', darkCard: '#1E293B' } } }
         }
     </script>
     <style>
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        body {
+            background: #0F172A;
+            overflow-x: hidden;
         }
 
-        .active-filter {
-            @apply bg-brand text-black border-brand scale-105;
+        /* CORRECTIF FLOU : On neutralise les transformations qui causent la pixélisation */
+        .card-wrapper {
+            perspective: 2000px;
+        }
+
+        .card-3d {
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            will-change: transform;
+            /* Force le navigateur à rendre le contenu net avant l'animation */
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Isolation de l'iframe pour éviter le flou de texture */
+        .pdf-layer {
+            transform: translateZ(1px);
+            /* Plan Z minimal pour stabiliser le rendu */
+            image-rendering: -webkit-optimize-contrast;
+            background: #0b1120;
+        }
+
+        iframe {
+            pointer-events: none;
+            /* Permet le clic sur toute la carte */
+            display: block;
+        }
+
+        /* Les textes flottent réellement en 3D sans flou */
+        .ui-layer {
+            transform: translateZ(50px);
         }
 
         .glass-nav {
             background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border-bottom: 2px solid #FACC15;
         }
     </style>
 </head>
 
-<body class="bg-darkBg text-white min-h-screen selection:bg-brand selection:text-black">
+<body class="bg-darkBg text-white min-h-screen">
 
     <nav class="glass-nav sticky top-0 z-50 p-4">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2 font-black text-2xl text-brand italic uppercase tracking-tighter">
-                <i data-lucide="shield-check"></i> Korchi Abdelaziz
+                <i data-lucide="shield-check"></i> KORCHI'S Certifs
             </div>
-            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                Portfolio de Certifications
-            </div>
+            <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">21 Certifications</div>
         </div>
     </nav>
 
-    <header class="container mx-auto pt-16 pb-8 px-4 text-center">
-        <h1 class="text-5xl md:text-7xl font-black italic text-white mb-4 animate__animated animate__fadeInDown">
-            COMPÉTENCES <span class="text-brand uppercase">Validées</span>
-        </h1>
-        <p class="text-slate-400 max-w-2xl mx-auto font-medium">
-            Exploration de mon parcours académique et professionnel à travers mes certifications officielles.
-        </p>
-    </header>
-
-    <main class="container mx-auto py-8 px-4">
-
-        <div class="flex flex-col items-center mb-10 space-y-6">
-            <div class="flex items-center gap-3 bg-darkCard p-2 px-6 rounded-full border border-slate-700 shadow-2xl">
-                <i data-lucide="calendar" class="text-brand w-5 h-5"></i>
-                <input type="month" id="filter-date" onchange="filterData()"
-                    class="bg-transparent font-bold text-brand outline-none cursor-pointer">
-                <button onclick="clearDateFilter()" class="hover:text-red-500 transition" title="Réinitialiser"><i
-                        data-lucide="refresh-ccw" class="w-4 h-4"></i></button>
-            </div>
-
-            <div id="skills-scroll" class="flex gap-3 overflow-x-auto no-scrollbar w-full py-4 px-2 scroll-smooth">
+    <main class="container mx-auto py-12 px-4">
+        <div class="max-w-2xl mx-auto mb-16">
+            <div class="relative group">
+                <i data-lucide="search"
+                    class="absolute left-6 top-1/2 -translate-y-1/2 text-brand w-5 h-5 transition-transform group-focus-within:scale-110"></i>
+                <input type="text" id="smart-search" oninput="filterData()"
+                    placeholder="Chercher un skill (Python, JS, C++)..."
+                    class="w-full bg-darkCard/60 border-2 border-slate-800 p-5 pl-16 rounded-2xl outline-none text-lg font-bold">
             </div>
         </div>
 
-        <div id="certs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        </div>
+        <div id="certs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"></div>
     </main>
 
     <div id="modal"
         class="hidden fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 overflow-y-auto"
         onclick="closeModal()">
-        <div class="bg-darkCard max-w-5xl w-full rounded-[3rem] overflow-hidden flex flex-col md:flex-row border border-brand/30 shadow-2xl animate__animated animate__zoomIn"
+        <div class="bg-darkCard max-w-6xl w-full rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row border border-brand/30 shadow-2xl animate__animated animate__zoomIn"
             onclick="event.stopPropagation()">
-            <div id="modal-img-container" class="md:w-1/2 bg-black flex items-center justify-center min-h-[400px]">
-            </div>
-            <div class="md:w-1/2 p-12 flex flex-col justify-center relative bg-darkCard text-left">
-                <button onclick="closeModal()" class="absolute top-8 right-8 text-brand hover:scale-125 transition"><i
-                        data-lucide="x-circle"></i></button>
+            <div id="modal-img-container" class="md:w-3/5 bg-black min-h-[500px]"></div>
+            <div class="md:w-2/5 p-12 flex flex-col justify-center relative bg-darkCard/50">
+                <button onclick="closeModal()"
+                    class="absolute top-8 right-8 text-brand hover:rotate-90 transition-transform duration-300"><i
+                        data-lucide="x-circle" class="w-8 h-8"></i></button>
                 <div id="modal-text"></div>
             </div>
         </div>
-        </header>
+    </div>
 
-        <script>
-            const DEFAULT_IMG = "https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?q=80&w=800";
-            let certs = [];
-            let activeSkill = null;
+    <script>
+        let certs = [];
 
-            // CHARGEMENT DU FICHIER JSON
-            async function loadCerts() {
-                try {
-                    const response = await fetch('Data/data.json');
-                    certs = await response.json();
-                    renderSkillsScroll();
-                    filterData();
-                } catch (error) {
-                    console.error("Erreur lors du chargement du JSON:", error);
-                    document.getElementById('certs-grid').innerHTML = "<p class='text-center col-span-full text-red-500 font-bold'>Erreur : Fichier data.json introuvable.</p>";
-                }
-            }
+        async function loadCerts() {
+            try {
+                const response = await fetch('Data/data.json');
+                certs = await response.json();
+                filterData();
+            } catch (e) { console.error("Data missing"); }
+        }
 
-            function renderSkillsScroll() {
-                const scroll = document.getElementById('skills-scroll');
-                const allSkills = [...new Set(certs.flatMap(c => c.skills))];
+        function filterData() {
+            const query = document.getElementById('smart-search').value.toLowerCase();
+            const filtered = certs.filter(c =>
+                c.title.toLowerCase().includes(query) ||
+                c.skills.some(s => s.toLowerCase().includes(query))
+            );
+            renderGrid(filtered);
+        }
 
-                scroll.innerHTML = `<button onclick="setSkillFilter(null)" class="flex-shrink-0 px-8 py-3 rounded-full border-2 border-slate-700 font-black transition ${!activeSkill ? 'active-filter' : ''}">TOUS LES SKILLS</button>`;
+        function renderGrid(data) {
+            const grid = document.getElementById('certs-grid');
+            grid.innerHTML = data.map((c, i) => `
+                <div class="card-wrapper">
+                    <div onclick="openDetails('${encodeURIComponent(JSON.stringify(c))}')" 
+                         class="card-3d cursor-pointer bg-darkCard rounded-[2.5rem] overflow-hidden border border-slate-800 hover:border-brand/50 transition-all shadow-2xl group" 
+                         data-tilt data-tilt-max="8" data-tilt-speed="1000" data-tilt-glare data-tilt-max-glare="0.15">
+                        
+                        <div class="h-60 overflow-hidden relative pdf-layer">
+                            <iframe src="${c.image}#toolbar=0&navpanes=0&scrollbar=0" 
+                                    loading="lazy"
+                                    class="w-full h-full border-none opacity-50 group-hover:opacity-100 transition-opacity duration-700"></iframe>
+                            <div class="absolute inset-0 bg-gradient-to-t from-darkCard via-transparent to-transparent z-10"></div>
+                        </div>
 
-                allSkills.forEach(s => {
-                    scroll.innerHTML += `<button onclick="setSkillFilter('${s}')" class="flex-shrink-0 px-8 py-3 rounded-full border-2 border-slate-700 font-black transition ${activeSkill === s ? 'active-filter' : ''}">#${s.toUpperCase()}</button>`;
-                });
-            }
-
-            function setSkillFilter(s) { activeSkill = s; renderSkillsScroll(); filterData(); }
-
-            function clearDateFilter() { document.getElementById('filter-date').value = ""; filterData(); }
-
-            function filterData() {
-                const dateVal = document.getElementById('filter-date').value;
-                const filtered = certs.filter(c => {
-                    const matchDate = dateVal ? c.date === dateVal : true;
-                    const matchSkill = activeSkill ? c.skills.includes(activeSkill) : true;
-                    return matchDate && matchSkill;
-                });
-                renderGrid(filtered);
-            }
-
-            function renderGrid(data) {
-                const grid = document.getElementById('certs-grid');
-                grid.innerHTML = data.map((c, i) => `
-                <div class="bg-darkCard rounded-[2.5rem] overflow-hidden border border-slate-700 hover:border-brand transition-all duration-500 shadow-xl group animate__animated animate__fadeInUp" style="animation-delay: ${i * 0.1}s">
-                    <div class="h-60 overflow-hidden relative">
-                        <img src="${c.image || DEFAULT_IMG}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-70 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-gradient-to-t from-darkCard to-transparent"></div>
-                    </div>
-                    <div class="p-8 -mt-12 relative">
-                        <p class="text-brand font-black text-[10px] tracking-[0.2em] mb-2 uppercase italic">${c.org} • ${c.date}</p>
-                        <h3 class="text-2xl font-bold mb-6 h-16 line-clamp-2 leading-tight">${c.title}</h3>
-                        <button onclick="openDetails('${encodeURIComponent(JSON.stringify(c))}')" class="w-full py-4 bg-brand text-black rounded-2xl font-black text-xs tracking-widest hover:brightness-110 transition active:scale-95 shadow-lg shadow-brand/10">VOIR DÉTAILS</button>
+                        <div class="p-8 -mt-8 relative z-20 ui-layer">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="bg-brand text-black px-3 py-1 rounded text-[9px] font-black uppercase italic">${c.org}</span>
+                                <span class="text-slate-500 text-[9px] font-bold tracking-widest">${c.date}</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-6 h-12 line-clamp-2 uppercase italic text-white group-hover:text-brand transition-colors">${c.title}</h3>
+                            <div class="w-full py-4 bg-brand/10 border border-brand/20 text-brand text-center rounded-2xl font-black text-[10px] tracking-widest group-hover:bg-brand group-hover:text-black transition-all uppercase italic shadow-lg shadow-brand/5">
+                                VOIR DÉTAILS
+                            </div>
+                        </div>
                     </div>
                 </div>
             `).join('');
-                lucide.createIcons();
-            }
 
-            function openDetails(encodedData) {
-                const c = JSON.parse(decodeURIComponent(encodedData));
-                const modal = document.getElementById('modal');
+            lucide.createIcons();
+            VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
 
-                document.getElementById('modal-img-container').innerHTML = `
-                <img src="${c.image || DEFAULT_IMG}" class="max-h-full max-w-full object-contain p-6">
+            // Animation GSAP optimisée contre le flou
+            gsap.from(".card-3d", {
+                duration: 0.5,
+                opacity: 0,
+                y: 20,
+                stagger: 0.05,
+                ease: "power2.out",
+                force3D: true, // Désactivé ou activé selon le support mais ici forcé pour stabiliser les pixels
+                onComplete: function () { gsap.set(".card-3d", { clearProps: "all" }); } // Nettoie les calculs de pixels après l'entrée
+            });
+        }
+
+        function openDetails(encodedData) {
+            const c = JSON.parse(decodeURIComponent(encodedData));
+            const modal = document.getElementById('modal');
+            document.getElementById('modal-img-container').innerHTML = `<iframe src="${c.image}" class="w-full h-full border-none min-h-[600px]"></iframe>`;
+            document.getElementById('modal-text').innerHTML = `
+                <h2 class="text-5xl font-black mb-4 italic text-brand uppercase tracking-tighter">${c.title}</h2>
+                <p class="text-white font-bold text-2xl mb-8 opacity-80">${c.org}</p>
+                <div class="flex flex-wrap gap-2 mb-10">${c.skills.map(s => `<span class="bg-slate-800 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 italic">#${s}</span>`).join('')}</div>
+                ${c.verify_link !== "N/A" ? `<a href="${c.verify_link}" target="_blank" class="inline-flex items-center gap-3 bg-brand text-black px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition shadow-lg shadow-brand/20 italic"><i data-lucide="external-link"></i> VÉRIFIER AUTHENTICITÉ</a>` : ''}
             `;
+            modal.classList.remove('hidden'); lucide.createIcons();
+        }
 
-                document.getElementById('modal-text').innerHTML = `
-                <span class="inline-block px-4 py-1 bg-brand/10 text-brand rounded-lg text-[10px] font-black mb-6 tracking-widest uppercase border border-brand/30 italic">Certification Vérifiée</span>
-                <h2 class="text-5xl font-black mb-2 text-white italic leading-none uppercase tracking-tighter">${c.title}</h2>
-                <p class="text-brand font-bold text-2xl mb-8">${c.org}</p>
-                <div class="space-y-4">
-                    <p class="text-slate-400 font-bold text-xs uppercase tracking-widest">Compétences Clés :</p>
-                    <div class="flex flex-wrap gap-2">
-                        ${c.skills.map(s => `<span class="bg-slate-800 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 italic">#${s}</span>`).join('')}
-                    </div>
-                </div>
-                <div class="mt-12 pt-8 border-t border-slate-700 flex items-center gap-4 text-slate-500 font-bold text-xs uppercase">
-                    <i data-lucide="calendar"></i> Délivré en ${c.date}
-                </div>
-            `;
-
-                modal.classList.remove('hidden');
-                lucide.createIcons();
-            }
-
-            function closeModal() { document.getElementById('modal').classList.add('hidden'); }
-
-            // Lancement au chargement
-            window.onload = loadCerts;
-        </script>
+        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+        window.onload = loadCerts;
+    </script>
 </body>
 
 </html>
