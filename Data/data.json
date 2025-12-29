@@ -1,48 +1,242 @@
 [
   {
-    "title": "Ingénieur Solution Cloud AWS",
-    "org": "Amazon Web Services",
-    "date": "2025-05",
+    "title": "Impact Measurement & Management for the SDGs",
+    "org": "Duke University",
+    "date": "2024-05-20",
     "skills": [
-      "AWS",
-      "Architecture",
-      "Sécurité",
-      "Docker"
+      "SDG",
+      "Impact Investing",
+      "Management"
     ],
-    "file": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800"
+    "image": "Data/certif/Impact Measurement & Management for the SDGs.pdf",
+    "verify_link": "https://coursera.org/verify/APMZA858FKYQ"
   },
   {
-    "title": "Développeur Full-Stack React & Node",
-    "org": "Meta (Coursera)",
-    "date": "2025-08",
+    "title": "Introduction to CSS3",
+    "org": "University of Michigan",
+    "date": "2024-01-20",
     "skills": [
-      "React",
+      "CSS3",
+      "Web Design",
+      "Frontend"
+    ],
+    "image": "Data/certif/css3 certif.pdf",
+    "verify_link": "https://coursera.org/verify/KFLEVJVT28PD"
+  },
+  {
+    "title": "Introduction to HTML5",
+    "org": "University of Michigan",
+    "date": "2024-01-19",
+    "skills": [
+      "HTML5",
+      "Web Development",
+      "Frontend"
+    ],
+    "image": "Data/certif/Html5 certif.pdf",
+    "verify_link": "https://coursera.org/verify/WTUCSCUUWC5Z"
+  },
+  {
+    "title": "Interactivity with JavaScript",
+    "org": "University of Michigan",
+    "date": "2024-01-19",
+    "skills": [
       "JavaScript",
-      "Tailwind CSS",
-      "MongoDB"
+      "Interactivity",
+      "Frontend"
     ],
-    "file": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=800"
+    "image": "Data/certif/Interactivity_with_JavaScript_2024.pdf",
+    "verify_link": "https://coursera.org/verify/FK7CKG52LE2L"
   },
   {
-    "title": "",
-    "org": "Google Analytics",
-    "date": "2024-12",
+    "title": "Introduction à la programmation orientée objet (en C++)",
+    "org": "EPFL",
+    "date": "2024-01-17",
     "skills": [
-      "Data",
-      "Marketing",
-      "SEO"
+      "C++",
+      "POO",
+      "Programmation"
     ],
-    "file": ""
+    "image": "Data/certif/Introduction_a_la_programmation_orientée_objet_17_janvier_2024.pdf",
+    "verify_link": "https://coursera.org/verify/AQ6XXL6MFTYP"
   },
   {
-    "title": "Expert en Cybersécurité",
-    "org": "",
-    "date": "",
+    "title": "Software Engineering: Modeling Software Systems using UML",
+    "org": "The Hong Kong University of Science and Technology",
+    "date": "2024-05-20",
     "skills": [
-      "Pentesting",
-      "Linux",
-      "Firewalls"
+      "UML",
+      "Software Engineering",
+      "Modeling"
     ],
-    "file": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800"
+    "image": "Data/certif/COO.pdf",
+    "verify_link": "https://coursera.org/verify/J3JMY7JQ6DQV"
+  },
+  
+  {
+    "title": "Oracle Cloud Infrastructure 2025 Certified DevOps Professional",
+    "org": "Oracle",
+    "date": "2025-09-17",
+    "skills": [
+      "OCI",
+      "DevOps",
+      "Cloud Infrastructure"
+    ],
+    "image": "Data/certif/Oracle_Cloud_Infrastructure_2025_Certified_DevOps_Professional.pdf",
+    "verify_link": "N/A"
+  },
+  {
+    "title": "Machine Learning with Python",
+    "org": "IBM",
+    "date": "2025-12-14",
+    "skills": [
+      "Machine Learning",
+      "Python",
+      "Data Science"
+    ],
+    "image": "Data/certif/Machine Learning with Python.pdf",
+    "verify_link": "https://coursera.org/verify/Q889MJB4DG5T"
+  },
+  {
+    "title": "Database Structures and Management with MySQL",
+    "org": "Meta",
+    "date": "2024-12-24",
+    "skills": [
+      "MySQL",
+      "Database Management",
+      "SQL"
+    ],
+    "image": "Data/certif/Mysql.pdf",
+    "verify_link": "https://coursera.org/verify/ELB3TCIV5115"
+  },
+  {
+    "title": "Data Analysis and Visualization with Power BI",
+    "org": "Microsoft",
+    "date": "2024-12-27",
+    "skills": [
+      "Power BI",
+      "Data Visualization",
+      "Data Analysis"
+    ],
+    "image": "Data/certif/Power BI.pdf",
+    "verify_link": "https://coursera.org/verify/8UVA30CWHE50"
+  },
+  {
+    "title": "The Unix Workbench",
+    "org": "Johns Hopkins University",
+    "date": "2024-05-18",
+    "skills": [
+      "Unix",
+      "Command Line",
+      "Shell Scripting"
+    ],
+    "image": "Data/certif/Unix.pdf",
+    "verify_link": "https://coursera.org/verify/L878R7ZFQYJU"
+  },
+  {
+    "title": "Programming for Everybody (Getting Started with Python)",
+    "org": "University of Michigan",
+    "date": "2024-05-20",
+    "skills": [
+      "Python",
+      "Programming",
+      "Basics"
+    ],
+    "image": "Data/certif/Python.pdf",
+    "verify_link": "https://coursera.org/verify/MUQKMYR4PCQ8"
+  },
+  {
+    "title": "La recherche documentaire",
+    "org": "École Polytechnique",
+    "date": "2024-05-20",
+    "skills": [
+      "Recherche Documentaire",
+      "Information Literacy"
+    ],
+    "image": "Data/certif/Recherche documentaire.pdf",
+    "verify_link": "https://coursera.org/verify/U7CYJ5EC4HCH"
+  },
+  {
+    "title": "Python for Data Science, AI & Development",
+    "org": "IBM",
+    "date": "2024-05-20",
+    "skills": [
+      "Python",
+      "Data Science",
+      "AI"
+    ],
+    "image": "Data/certif/Python_Data_Science.pdf",
+    "verify_link": "https://www.coursera.org/learn/python?specialization=python"
+  },
+  {
+    "title": "Unix Tools",
+    "org": "Johns Hopkins University",
+    "date": "2024-05-20",
+    "skills": [
+      "Unix",
+      "Tools",
+      "Linux"
+    ],
+    "image": "Data/certif/Unix_Tools.pdf",
+    "verify_link": "https://www.coursera.org/learn/unix"
+  },
+  {
+    "title": "Modeling Software Systems using UML",
+    "org": "The Hong Kong University of Science and Technology",
+    "date": "2024-05-20",
+    "skills": [
+      "UML",
+      "Modeling",
+      "Software Design"
+    ],
+    "image": "Data/certif/UML_Modeling.pdf",
+    "verify_link": "https://www.coursera.org/learn/software-engineering-software-design"
+  },
+  {
+    "title": "Measuring Sustainable Development Progress",
+    "org": "Duke University",
+    "date": "2024-05-20",
+    "skills": [
+      "SDG",
+      "Measurement",
+      "Sustainability"
+    ],
+    "image": "Data/certif/Measuring_Sustainable_Development.pdf",
+    "verify_link": "https://www.coursera.org/learn/impact-for-sdgs"
+  },
+  {
+    "title": "Sustainable Development Relevance to Africa",
+    "org": "EPFL",
+    "date": "2024-05-20",
+    "skills": [
+      "Africa",
+      "Sustainability",
+      "Development"
+    ],
+    "image": "Data/certif/Sustainable_Africa.pdf",
+    "verify_link": "https://www.coursera.org/learn/environnement-urbain-afrique"
+  },
+  {
+    "title": "C++ Programming: Program Design and POO",
+    "org": "EPFL",
+    "date": "2024-01-17",
+    "skills": [
+      "C++",
+      "POO",
+      "Program Design"
+    ],
+    "image": "Data/certif/c++ certif.pdf",
+    "verify_link": "https://coursera.org/verify/AQ6XXL6MFTYP"
+  },
+  {
+    "title": "Impact Measurement for SDG Progress",
+    "org": "Duke University",
+    "date": "2024-05-20",
+    "skills": [
+      "SDG",
+      "Impact",
+      "Management"
+    ],
+    "image": "Data/certif/Impact Measurement.pdf",
+    "verify_link": "https://coursera.org/verify/APMZA858FKYQ"
   }
 ]
