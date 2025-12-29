@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Korchi's Vault | Portfolio 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -19,6 +19,7 @@
         body {
             background: #0F172A;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .card-wrapper {
@@ -34,13 +35,15 @@
 
         .pdf-layer {
             transform: translateZ(1px);
-            image-rendering: -webkit-optimize-contrast;
             background: #0b1120;
         }
 
         iframe {
             pointer-events: none;
             display: block;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         .ui-layer {
@@ -52,44 +55,62 @@
             backdrop-filter: blur(15px);
             border-bottom: 2px solid #FACC15;
         }
+
+        /* Optimisation Mobile */
+        @media (max-width: 768px) {
+            .card-3d {
+                transform: none !important;
+            }
+
+            /* Désactive tilt sur mobile pour perf */
+            .modal-content {
+                border-radius: 2rem 2rem 0 0 !important;
+                margin-top: auto !important;
+                height: 90vh;
+            }
+        }
     </style>
 </head>
 
 <body class="bg-darkBg text-white min-h-screen">
 
-    <nav class="glass-nav sticky top-0 z-50 p-4">
+    <nav class="glass-nav sticky top-0 z-[60] p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2 font-black text-2xl text-brand italic uppercase tracking-tighter">
+            <div
+                class="flex items-center gap-2 font-black text-xl md:text-2xl text-brand italic uppercase tracking-tighter">
                 <i data-lucide="shield-check"></i> KORCHI'S VAULT
             </div>
-            <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">21 Validations technical
+            <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest hidden xs:block">21 Validations
             </div>
         </div>
     </nav>
 
-    <main class="container mx-auto py-12 px-4">
-        <div class="max-w-2xl mx-auto mb-16">
+    <main class="container mx-auto py-8 md:py-12 px-4">
+        <div class="max-w-2xl mx-auto mb-10 md:mb-16">
             <div class="relative group">
                 <i data-lucide="search"
                     class="absolute left-6 top-1/2 -translate-y-1/2 text-brand w-5 h-5 transition-transform group-focus-within:scale-110"></i>
                 <input type="text" id="smart-search" oninput="filterData()"
-                    placeholder="Chercher un skill (Python, JS, C++)..."
-                    class="w-full bg-darkCard/60 border-2 border-slate-800 p-5 pl-16 rounded-2xl outline-none text-lg font-bold">
+                    placeholder="Python, JavaScript, EPFL, Oracle..."
+                    class="w-full bg-darkCard/60 border-2 border-slate-800 p-4 md:p-5 pl-14 md:pl-16 rounded-2xl outline-none text-base md:text-lg font-bold placeholder:text-slate-600 focus:border-brand/50 transition-all">
             </div>
         </div>
-        <div id="certs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"></div>
+        <div id="certs-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12"></div>
     </main>
 
     <div id="modal"
-        class="hidden fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 overflow-y-auto"
+        class="hidden fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-0 md:p-4 overflow-y-auto"
         onclick="closeModal()">
-        <div class="bg-darkCard max-w-6xl w-full rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row border border-brand/30 shadow-2xl animate__animated animate__zoomIn"
+        <div class="modal-content bg-darkCard max-w-6xl w-full md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row border-t md:border border-brand/30 shadow-2xl transition-all duration-500"
             onclick="event.stopPropagation()">
-            <div id="modal-img-container" class="md:w-3/5 bg-black min-h-[500px]"></div>
-            <div class="md:w-2/5 p-12 flex flex-col justify-center relative bg-darkCard/50">
+            <div id="modal-img-container" class="w-full md:w-3/5 bg-black min-h-[300px] md:min-h-[500px] relative">
+            </div>
+            <div
+                class="w-full md:w-2/5 p-8 md:p-12 flex flex-col justify-center relative bg-darkCard/50 backdrop-blur-md overflow-y-auto">
                 <button onclick="closeModal()"
-                    class="absolute top-8 right-8 text-brand hover:rotate-90 transition-transform duration-300"><i
-                        data-lucide="x-circle" class="w-8 h-8"></i></button>
+                    class="absolute top-6 right-6 text-brand md:hover:rotate-90 transition-transform duration-300">
+                    <i data-lucide="x-circle" class="w-8 h-8 md:w-10 md:h-10"></i>
+                </button>
                 <div id="modal-text"></div>
             </div>
         </div>
@@ -97,17 +118,19 @@
 
     <script>
         let certs = [];
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
         async function loadCerts() {
             try {
                 const response = await fetch('Data/data.json');
                 certs = await response.json();
                 filterData();
-            } catch (e) { console.error("Data missing"); }
+            } catch (e) { console.error("Fichier Data/data.json introuvable."); }
         }
 
         function filterData() {
             const query = document.getElementById('smart-search').value.toLowerCase();
-            const filtered = certs.filter(c => c.title.toLowerCase().includes(query) || c.skills.some(s => s.toLowerCase().includes(query)));
+            const filtered = certs.filter(c => c.title.toLowerCase().includes(query) || c.org.toLowerCase().includes(query) || c.skills.some(s => s.toLowerCase().includes(query)));
             renderGrid(filtered);
         }
 
@@ -116,42 +139,82 @@
             grid.innerHTML = data.map((c, i) => `
                 <div class="card-wrapper">
                     <div onclick="openDetails('${encodeURIComponent(JSON.stringify(c))}')" 
-                         class="card-3d cursor-pointer bg-darkCard rounded-[2.5rem] overflow-hidden border border-slate-800 hover:border-brand/50 transition-all shadow-2xl group" 
-                         data-tilt data-tilt-max="8" data-tilt-speed="1000" data-tilt-glare data-tilt-max-glare="0.15">
-                        <div class="h-60 overflow-hidden relative pdf-layer">
-                            <iframe src="${c.image}#toolbar=0&navpanes=0&scrollbar=0" loading="lazy" class="w-full h-full border-none opacity-50 group-hover:opacity-100 transition-opacity duration-700"></iframe>
+                         class="card-3d cursor-pointer bg-darkCard rounded-[2rem] overflow-hidden border border-slate-800 hover:border-brand/50 transition-all shadow-2xl group" 
+                         ${!isMobile ? 'data-tilt data-tilt-max="8" data-tilt-glare data-tilt-max-glare="0.15"' : ''}>
+                        <div class="h-48 md:h-60 overflow-hidden relative pdf-layer">
+                            ${!isMobile ?
+                    `<iframe src="${c.image}#toolbar=0&navpanes=0&scrollbar=0" loading="lazy" class="opacity-50 group-hover:opacity-100 transition-opacity duration-700"></iframe>` :
+                    `<img src="Data/fake.png" class="w-full h-full object-cover opacity-40">`
+                }
                             <div class="absolute inset-0 bg-gradient-to-t from-darkCard via-transparent to-transparent z-10"></div>
-                        </div>
-                        <div class="p-8 -mt-8 relative z-20 ui-layer">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="bg-brand text-black px-3 py-1 rounded text-[9px] font-black uppercase italic">${c.org}</span>
-                                <span class="text-slate-500 text-[9px] font-bold tracking-widest">${c.date}</span>
+                            <div class="absolute top-4 left-4 z-20 flex items-center gap-2">
+                                <span class="bg-brand text-black text-[8px] font-black px-2 py-0.5 rounded uppercase tracking-tighter">${c.org.split(' ')[0]}</span>
                             </div>
-                            <h3 class="text-xl font-bold mb-6 h-12 line-clamp-2 uppercase italic text-white group-hover:text-brand transition-colors">${c.title}</h3>
-                            <div class="w-full py-4 bg-brand/10 border border-brand/20 text-brand text-center rounded-2xl font-black text-[10px] tracking-widest group-hover:bg-brand group-hover:text-black transition-all uppercase italic">VOIR DÉTAILS</div>
+                        </div>
+                        <div class="p-6 md:p-8 -mt-8 relative z-20 ui-layer">
+                            <p class="text-brand text-[10px] font-black uppercase tracking-widest mb-1 opacity-80">${c.date}</p>
+                            <h3 class="text-lg md:text-xl font-bold mb-4 h-12 line-clamp-2 uppercase italic text-white group-hover:text-brand transition-colors leading-tight">${c.title}</h3>
+                            <div class="w-full py-3 border border-brand/20 text-brand text-center rounded-xl font-black text-[10px] tracking-widest group-hover:bg-brand group-hover:text-black transition-all uppercase">Détails Certif</div>
                         </div>
                     </div>
                 </div>
             `).join('');
             lucide.createIcons();
-            VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
-            gsap.from(".card-3d", { duration: 0.5, opacity: 0, y: 20, stagger: 0.05, ease: "power2.out", onComplete: () => gsap.set(".card-3d", { clearProps: "all" }) });
+            if (!isMobile) VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
+            gsap.from(".card-3d", { duration: 0.4, opacity: 0, y: 20, stagger: 0.05, ease: "power2.out" });
         }
 
         function openDetails(encodedData) {
             const c = JSON.parse(decodeURIComponent(encodedData));
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             const imgContainer = document.getElementById('modal-img-container');
+
+            // Logique d'affichage Image/PDF
             if (isMobile) {
-                imgContainer.innerHTML = `<div class="flex flex-col items-center justify-center p-10 text-center space-y-6 bg-slate-900 h-full"><i data-lucide="file-text" class="w-16 h-16 text-brand"></i><h3 class="text-white font-black uppercase italic text-xl">Visualisation Mobile</h3><a href="${c.image}" target="_blank" class="w-full bg-white text-black py-4 rounded-xl font-black text-xs uppercase tracking-widest">OUVRIR LE PDF</a></div>`;
+                imgContainer.innerHTML = `
+                    <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-6 bg-slate-900">
+                        <img src="Data/fake.png" class="absolute inset-0 w-full h-full object-cover opacity-30 grayscale">
+                        <div class="relative z-10 p-6 bg-brand/10 rounded-3xl border border-brand/20 backdrop-blur-sm">
+                            <i data-lucide="file-text" class="w-12 h-12 text-brand mx-auto mb-4"></i>
+                            <h4 class="text-white font-black uppercase text-lg italic tracking-tighter">Aperçu Mobile</h4>
+                            <p class="text-slate-400 text-xs mb-6">Le lecteur PDF est optimisé pour le plein écran sur mobile.</p>
+                            <a href="${c.image}" target="_blank" class="block w-full bg-brand text-black py-4 px-8 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-transform">OUVRIR LE CERTIFICAT REEL</a>
+                        </div>
+                    </div>`;
             } else {
-                imgContainer.innerHTML = `<iframe src="${c.image}" class="w-full h-full border-none min-h-[600px]"></iframe>`;
+                imgContainer.innerHTML = `<iframe src="${c.image}" class="w-full h-full"></iframe>`;
             }
-            document.getElementById('modal-text').innerHTML = `<h2 class="text-5xl font-black mb-4 italic text-brand uppercase tracking-tighter">${c.title}</h2><p class="text-white font-bold text-2xl mb-8 opacity-80">${c.org}</p><div class="flex flex-wrap gap-2 mb-10">${c.skills.map(s => `<span class="bg-slate-800 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 italic">#${s}</span>`).join('')}</div>${c.verify_link !== "N/A" ? `<a href="${c.verify_link}" target="_blank" class="inline-flex items-center gap-3 bg-brand text-black px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition italic shadow-lg"><i data-lucide="external-link"></i> VÉRIFIER AUTHENTICITÉ</a>` : ''}`;
-            document.getElementById('modal').classList.remove('hidden'); lucide.createIcons();
+
+            // Style du texte pour Mobile (Taille de police adaptée)
+            document.getElementById('modal-text').innerHTML = `
+                <div class="animate__animated animate__fadeInUp">
+                    <h2 class="text-3xl md:text-5xl font-black mb-3 italic text-brand uppercase tracking-tighter leading-none">${c.title}</h2>
+                    <p class="text-white font-bold text-lg md:text-2xl mb-6 md:mb-8 opacity-90">${c.org}</p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center gap-2 text-slate-500 uppercase text-[10px] font-black tracking-widest border-b border-slate-800 pb-2">
+                            <i data-lucide="award" class="w-3 h-3"></i> Compétences Validées
+                        </div>
+                        <div class="flex flex-wrap gap-2 md:gap-3">
+                            ${c.skills.map(s => `<span class="bg-slate-800/80 text-slate-200 px-3 md:px-4 py-2 rounded-xl text-[10px] md:text-xs font-bold border border-slate-700 italic">#${s}</span>`).join('')}
+                        </div>
+                    </div>
+                    
+                    ${c.verify_link !== "N/A" ? `
+                    <a href="${c.verify_link}" target="_blank" class="inline-flex items-center justify-center gap-3 w-full md:w-auto bg-white/5 border border-white/10 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-brand hover:text-black transition-all shadow-lg italic">
+                        <i data-lucide="external-link" class="w-4 h-4"></i> Vérifier Authenticité
+                    </a>` : ''}
+                </div>
+            `;
+            document.getElementById('modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
         }
 
-        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
         window.onload = loadCerts;
     </script>
 </body>
