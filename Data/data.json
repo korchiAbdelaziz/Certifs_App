@@ -34,7 +34,7 @@
   },
   {
     "title": "Impact Measurement & Management for the SDGs",
-    "org": "Duke University",
+    "org": "Duke_University",
     "date": "2024-05-20",
     "skills": [
       "SDG",
@@ -45,7 +45,7 @@
   },
   {
     "title": "Introduction to CSS3",
-    "org": "University of Michigan",
+    "org": "University_of_Michigan",
     "date": "2024-01-20",
     "skills": [
       "CSS3",
@@ -56,7 +56,7 @@
   },
   {
     "title": "Introduction to HTML5",
-    "org": "University of Michigan",
+    "org": "University_of_Michigan",
     "date": "2024-01-19",
     "skills": [
       "HTML5",
@@ -67,7 +67,7 @@
   },
   {
     "title": "Interactivity with JavaScript",
-    "org": "University of Michigan",
+    "org": "University_of_Michigan",
     "date": "2024-01-19",
     "skills": [
       "JavaScript",
@@ -121,7 +121,7 @@
     "verify_link": "https://coursera.org/verify/Q889MJB4DG5T"
   },
   {
-    "title": "The Unix Workbench",
+    "title": "The_Unix_Workbench",
     "org": "Johns Hopkins",
     "date": "2024-05-18",
     "skills": [
