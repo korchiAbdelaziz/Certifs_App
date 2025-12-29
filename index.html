@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Korchi's Certifs</title>
+    <title>Korchi's Vault | Portfolio 3D</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
@@ -21,7 +21,6 @@
             overflow-x: hidden;
         }
 
-        /* CORRECTIF FLOU : On neutralise les transformations qui causent la pixélisation */
         .card-wrapper {
             perspective: 2000px;
         }
@@ -30,25 +29,20 @@
             transform-style: preserve-3d;
             backface-visibility: hidden;
             will-change: transform;
-            /* Force le navigateur à rendre le contenu net avant l'animation */
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Isolation de l'iframe pour éviter le flou de texture */
         .pdf-layer {
             transform: translateZ(1px);
-            /* Plan Z minimal pour stabiliser le rendu */
             image-rendering: -webkit-optimize-contrast;
             background: #0b1120;
         }
 
         iframe {
             pointer-events: none;
-            /* Permet le clic sur toute la carte */
             display: block;
         }
 
-        /* Les textes flottent réellement en 3D sans flou */
         .ui-layer {
             transform: translateZ(50px);
         }
@@ -66,9 +60,10 @@
     <nav class="glass-nav sticky top-0 z-50 p-4">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2 font-black text-2xl text-brand italic uppercase tracking-tighter">
-                <i data-lucide="shield-check"></i> KORCHI'S Certifs
+                <i data-lucide="shield-check"></i> KORCHI'S VAULT
             </div>
-            <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">21 Certifications</div>
+            <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">21 Validations technical
+            </div>
         </div>
     </nav>
 
@@ -82,7 +77,6 @@
                     class="w-full bg-darkCard/60 border-2 border-slate-800 p-5 pl-16 rounded-2xl outline-none text-lg font-bold">
             </div>
         </div>
-
         <div id="certs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"></div>
     </main>
 
@@ -103,7 +97,6 @@
 
     <script>
         let certs = [];
-
         async function loadCerts() {
             try {
                 const response = await fetch('Data/data.json');
@@ -114,10 +107,7 @@
 
         function filterData() {
             const query = document.getElementById('smart-search').value.toLowerCase();
-            const filtered = certs.filter(c =>
-                c.title.toLowerCase().includes(query) ||
-                c.skills.some(s => s.toLowerCase().includes(query))
-            );
+            const filtered = certs.filter(c => c.title.toLowerCase().includes(query) || c.skills.some(s => s.toLowerCase().includes(query)));
             renderGrid(filtered);
         }
 
@@ -128,54 +118,37 @@
                     <div onclick="openDetails('${encodeURIComponent(JSON.stringify(c))}')" 
                          class="card-3d cursor-pointer bg-darkCard rounded-[2.5rem] overflow-hidden border border-slate-800 hover:border-brand/50 transition-all shadow-2xl group" 
                          data-tilt data-tilt-max="8" data-tilt-speed="1000" data-tilt-glare data-tilt-max-glare="0.15">
-                        
                         <div class="h-60 overflow-hidden relative pdf-layer">
-                            <iframe src="${c.image}#toolbar=0&navpanes=0&scrollbar=0" 
-                                    loading="lazy"
-                                    class="w-full h-full border-none opacity-50 group-hover:opacity-100 transition-opacity duration-700"></iframe>
+                            <iframe src="${c.image}#toolbar=0&navpanes=0&scrollbar=0" loading="lazy" class="w-full h-full border-none opacity-50 group-hover:opacity-100 transition-opacity duration-700"></iframe>
                             <div class="absolute inset-0 bg-gradient-to-t from-darkCard via-transparent to-transparent z-10"></div>
                         </div>
-
                         <div class="p-8 -mt-8 relative z-20 ui-layer">
                             <div class="flex justify-between items-center mb-4">
                                 <span class="bg-brand text-black px-3 py-1 rounded text-[9px] font-black uppercase italic">${c.org}</span>
                                 <span class="text-slate-500 text-[9px] font-bold tracking-widest">${c.date}</span>
                             </div>
                             <h3 class="text-xl font-bold mb-6 h-12 line-clamp-2 uppercase italic text-white group-hover:text-brand transition-colors">${c.title}</h3>
-                            <div class="w-full py-4 bg-brand/10 border border-brand/20 text-brand text-center rounded-2xl font-black text-[10px] tracking-widest group-hover:bg-brand group-hover:text-black transition-all uppercase italic shadow-lg shadow-brand/5">
-                                VOIR DÉTAILS
-                            </div>
+                            <div class="w-full py-4 bg-brand/10 border border-brand/20 text-brand text-center rounded-2xl font-black text-[10px] tracking-widest group-hover:bg-brand group-hover:text-black transition-all uppercase italic">VOIR DÉTAILS</div>
                         </div>
                     </div>
                 </div>
             `).join('');
-
             lucide.createIcons();
             VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
-
-            // Animation GSAP optimisée contre le flou
-            gsap.from(".card-3d", {
-                duration: 0.5,
-                opacity: 0,
-                y: 20,
-                stagger: 0.05,
-                ease: "power2.out",
-                force3D: true, // Désactivé ou activé selon le support mais ici forcé pour stabiliser les pixels
-                onComplete: function () { gsap.set(".card-3d", { clearProps: "all" }); } // Nettoie les calculs de pixels après l'entrée
-            });
+            gsap.from(".card-3d", { duration: 0.5, opacity: 0, y: 20, stagger: 0.05, ease: "power2.out", onComplete: () => gsap.set(".card-3d", { clearProps: "all" }) });
         }
 
         function openDetails(encodedData) {
             const c = JSON.parse(decodeURIComponent(encodedData));
-            const modal = document.getElementById('modal');
-            document.getElementById('modal-img-container').innerHTML = `<iframe src="${c.image}" class="w-full h-full border-none min-h-[600px]"></iframe>`;
-            document.getElementById('modal-text').innerHTML = `
-                <h2 class="text-5xl font-black mb-4 italic text-brand uppercase tracking-tighter">${c.title}</h2>
-                <p class="text-white font-bold text-2xl mb-8 opacity-80">${c.org}</p>
-                <div class="flex flex-wrap gap-2 mb-10">${c.skills.map(s => `<span class="bg-slate-800 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 italic">#${s}</span>`).join('')}</div>
-                ${c.verify_link !== "N/A" ? `<a href="${c.verify_link}" target="_blank" class="inline-flex items-center gap-3 bg-brand text-black px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition shadow-lg shadow-brand/20 italic"><i data-lucide="external-link"></i> VÉRIFIER AUTHENTICITÉ</a>` : ''}
-            `;
-            modal.classList.remove('hidden'); lucide.createIcons();
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const imgContainer = document.getElementById('modal-img-container');
+            if (isMobile) {
+                imgContainer.innerHTML = `<div class="flex flex-col items-center justify-center p-10 text-center space-y-6 bg-slate-900 h-full"><i data-lucide="file-text" class="w-16 h-16 text-brand"></i><h3 class="text-white font-black uppercase italic text-xl">Visualisation Mobile</h3><a href="${c.image}" target="_blank" class="w-full bg-white text-black py-4 rounded-xl font-black text-xs uppercase tracking-widest">OUVRIR LE PDF</a></div>`;
+            } else {
+                imgContainer.innerHTML = `<iframe src="${c.image}" class="w-full h-full border-none min-h-[600px]"></iframe>`;
+            }
+            document.getElementById('modal-text').innerHTML = `<h2 class="text-5xl font-black mb-4 italic text-brand uppercase tracking-tighter">${c.title}</h2><p class="text-white font-bold text-2xl mb-8 opacity-80">${c.org}</p><div class="flex flex-wrap gap-2 mb-10">${c.skills.map(s => `<span class="bg-slate-800 text-slate-200 px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 italic">#${s}</span>`).join('')}</div>${c.verify_link !== "N/A" ? `<a href="${c.verify_link}" target="_blank" class="inline-flex items-center gap-3 bg-brand text-black px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition italic shadow-lg"><i data-lucide="external-link"></i> VÉRIFIER AUTHENTICITÉ</a>` : ''}`;
+            document.getElementById('modal').classList.remove('hidden'); lucide.createIcons();
         }
 
         function closeModal() { document.getElementById('modal').classList.add('hidden'); }
